@@ -1,0 +1,99 @@
+/* === Базове оформлення та box model === */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* === Селектор тега === */
+header, nav, main, footer {
+    padding: 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+/* === Селектор класу === */
+.float-left {
+    float: left;
+    width: 30%;
+    margin-right: 10px;
+}
+
+.float-right {
+    float: right;
+    width: 30%;
+    margin-left: 10px;
+}
+
+.float-center {
+    margin: 0 auto;
+    width: 60%;
+    display: block;
+}
+
+/* === Селектор ідентифікатора === */
+#title {
+    border: 2px solid #007BFF;
+    padding: 5px;
+}
+
+/* === Псевдоклас === */
+a:hover {
+    color: red;
+    text-decoration: underline;
+}
+
+/* === Псевдоелемент === */
+h2::first-letter {
+    font-size: 150%;
+    color: #007BFF;
+}
+
+/* === Комбінатор: нащадок === */
+nav a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #333;
+}
+
+/* === Селектор з атрибутом === */
+input[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+/* === Таблиця === */
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+/* === Зображення === */
+img {
+    width: 100%;
+    height: auto;
+}
+
+/* === Footer === */
+footer {
+    clear: both;
+    text-align: center;
+}
+
+/* === Очищення обтікання для головного блоку === */
+main::after {
+    content: "";
+    display: table;
+    clear: both;
+}

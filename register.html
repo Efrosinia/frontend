@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Register – RecomFilm</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <script src="scripts/auth.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Register for RecomFilm</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="auth-container">
+            <form id="registerForm">
+                <label for="newUsername">Username:</label>
+                <input type="text" id="newUsername" name="newUsername" required><br><br>
+
+                <label for="newPassword">Password:</label>
+                <input type="password" id="newPassword" name="newPassword" required><br><br>
+
+                <input type="submit" value="Register">
+            </form>
+
+            <p>Already have an account? <a href="login.html">Login here</a>.</p>
+            <div id="registerMessage" class="auth-message"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 RecomFilm – Film & Series Recommendations</p>
+    </footer>
+</body>
+</html>

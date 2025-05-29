@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile - RecomFilm</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f4f4f4;
+    }
+    nav {
+      background-color: #333;
+      padding: 10px 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+    nav a {
+      color: white;
+      margin-right: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .profile-container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .logout-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .logout-button:hover {
+      background-color: #c0392b;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ddd;
+      background-color: #ccc;
+    }
+    .profile-info h2, .profile-info textarea {
+      margin: 0;
+    }
+    .profile-info p {
+      margin: 5px 0;
+      color: #555;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      font-size: 16px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+      font-family: Arial, sans-serif;
+    }
+    input[type="file"] {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    button.save-button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button.save-button:hover {
+      background-color: #2980b9;
+    }
+    .stats {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .stat-box {
+      flex: 1;
+      background: #f9f9f9;
+      margin: 0 10px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+    .stat-box h3 {
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .stat-box span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .recommendation-list {
+      margin-top: 40px;
+    }
+    .recommendation-list h3 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .recommendation-item {
+      display: flex;
+      align-items: center;
+      background: #fdfdfd;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: #222;
+      transition: background 0.2s ease;
+    }
+    .recommendation-item:hover {
+      background: #f2f2f2;
+    }
+    .recommendation-item img {
+      width: 60px;
+      height: 60px;
+      border-radius: 5px;
+      object-fit: cover;
+      margin-right: 15px;
+      background-color: #ccc;
+    }
+    .recommendation-content {
+      display: flex;
+      flex-direction: column;
+    }
+    .recommendation-title {
+      font-weight: bold;
+    }
+    .recommendation-rating {
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="create_recommendation.html">Create Recommendation</a>
+  <a href="profile.html">Profile</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+  <a href="register.html">Register</a>
+</nav>
+
+<div class="profile-container">
+  <button class="logout-button" onclick="logout()">Log Out</button>
+
+  <div class="profile-header">
+    <img id="avatarPreview" src="avatar.jpg" alt="User Avatar" />
+    <div class="profile-info">
+      <label for="usernameInput"><strong>Username:</strong></label>
+      <input type="text" id="usernameInput" maxlength="30" />
+
+      <label for="bioInput"><strong>Bio:</strong></label>
+      <textarea id="bioInput" rows="4" maxlength="300" placeholder="Tell us something about yourself..."></textarea>
+
+      <label for="avatarInput"><strong>Change Avatar:</strong></label>
+      <input type="file" id="avatarInput" accept="image/*" />
+    </div>
+  </div>
+
+  <button class="save-button" onclick="saveProfile()">Save Changes</button>
+
+  <div class="stats">
+    <div class="stat-box">
+      <h3>Reputation</h3>
+      <span id="reputation">0</span>
+    </div>
+    <div class="stat-box">
+      <h3>Recommendations</h3>
+      <span id="recommendationsCount">0</span>
+    </div>
+    <div class="stat-box">
+      <h3>Comments</h3>
+      <span id="commentsCount">0</span>
+    </div>
+  </div>
+
+  <div class="recommendation-list">
+    <h3>My Recommendations</h3>
+
+    <a href="recommendation.html?id=1" class="recommendation-item">
+      <img src="interstellar.jpg" alt="Interstellar Poster">
+      <div class="recommendation-content">
+        <span class="recommendation-title">Interstellar</span>
+        <span class="recommendation-rating">⭐ 4.8 / 5</span>
+      </div>
+    </a>
+
+    <a href="recommendation.html?id=2" class="recommendation-item">
+      <img src="placeholder.jpg" alt="No Image">
+      <div class="recommendation-content">
+        <span class="recommendation-title">Black Mirror</span>
+        <span class="recommendation-rating">⭐ 4.6 / 5</span>
+      </div>
+    </a>
+
+    <a href="recommendation.html?id=3" class="recommendation-item">
+      <img src="parasite.jpg" alt="Parasite Poster">
+      <div class="recommendation-content">
+        <span class="recommendation-title">Parasite</span>
+        <span class="recommendation-rating">⭐ 4.9 / 5</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<script>
+  // Завантаження користувача із localStorage
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('recomfilm_users')) || [];
+  }
+  function saveUsers(users) {
+    localStorage.setItem('recomfilm_users', JSON.stringify(users));
+  }
+
+  function getLoggedInUser() {
+    return localStorage.getItem('loggedInUser');
+  }
+
+  function getUserData(username) {
+    const users = getUsers();
+    return users.find(u => u.username === username);
+  }
+
+  function saveUserData(user) {
+    let users = getUsers();
+    const idx = users.findIndex(u => u.username === user.username);
+    if (idx !== -1) {
+      users[idx] = user;
+    } else {
+      users.push(user);
+    }
+    saveUsers(users);
+  }
+
+  // Показати дані користувача в профілі
+  function loadProfile() {
+    const username = getLoggedInUser();
+    if (!username) {
+      alert('Please log in first!');
+      window.location.href = 'login.html';
+      return;
+    }
+    const user = getUserData(username);
+    if (!user) {
+      alert('User data not found!');
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    document.getElementById('usernameInput').value = user.username;
+    document.getElementById('bioInput').value = user.bio || '';
+    document.getElementById('reputation').textContent = user.reputation || 0;
+    document.getElementById('recommendationsCount').textContent = (user.recommendations ? user.recommendations.length : 0);
+    document.getElementById('commentsCount').textContent = user.comments || 0;
+
+    if (user.avatar) {
+      document.getElementById('avatarPreview').src = user.avatar;
+    } else {
+      document.getElementById('avatarPreview').src = 'avatar.jpg';
+    }
+
+    loadRecommendations(user.recommendations || []);
+  }
+
+  function loadRecommendations(recs) {
+    const container = document.getElementById('recommendationsContainer');
+    container.innerHTML = '';
+    if (recs.length === 0) {
+      container.textContent = 'No recommendations yet.';
+      return;
+    }
+    recs.forEach(rec => {
+      const a = document.createElement('a');
+      a.href = `recommendation.html?id=${rec.id}`;
+      a.className = 'recommendation-item';
+
+      const img = document.createElement('img');
+      img.src = rec.image || 'placeholder.jpg';
+      img.alt = rec.title + ' Poster';
+
+      const div = document.createElement('div');
+      div.className = 'recommendation-content';
+
+      const title = document.createElement('span');
+      title.className = 'recommendation-title';
+      title.textContent = rec.title;
+
+      const rating = document.createElement('span');
+      rating.className = 'recommendation-rating';
+      rating.textContent = `⭐ ${rec.rating} / 5`;
+
+      div.appendChild(title);
+      div.appendChild(rating);
+
+      a.appendChild(img);
+      a.appendChild(div);
+
+      container.appendChild(a);
+    });
+  }
+
+  // Зберегти зміни профілю
+  function saveProfile() {
+    const oldUsername = getLoggedInUser();
+    const newUsername = document.getElementById('usernameInput').value.trim();
+    const bio = document.getElementById('bioInput').value.trim();
+    const avatarInput = document.getElementById('avatarInput');
+
+    if (!newUsername) {
+      alert('Username cannot be empty!');
+      return;
+    }
+
+    let users = getUsers();
+
+    // Перевірка, чи не зайнятий новий юзернейм (якщо змінили)
+    if (newUsername !== oldUsername && users.some(u => u.username === newUsername)) {
+      alert('Username is already taken, please choose another.');
+      return;
+    }
+
+    // Отримати користувача
+    let user = users.find(u => u.username === oldUsername);
+    if (!user) {
+      alert('User not found!');
+      return;
+    }
+
+    // Оновити дані
+    user.username = newUsername;
+    user.bio = bio;
+
+    // Обробка аватара (якщо обрали новий файл)
+    if (avatarInput.files && avatarInput.files[0]) {
+      const file = avatarInput.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        user.avatar = e.target.result;
+        finishSave(user, users, oldUsername, newUsername);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      finishSave(user, users, oldUsername, newUsername);
+    }
+  }
+
+  // Допоміжна функція для завершення збереження
+  function finishSave(user, users, oldUsername, newUsername) {
+    // Якщо ім'я змінилося, треба оновити і список користувачів та локальний логін
+    if (oldUsername !== newUsername) {
+      // Замінити старий запис
+      const idx = users.findIndex(u => u.username === oldUsername);
+      if (idx !== -1) users.splice(idx, 1);
+
+      // Додати нового
+      users.push(user);
+
+      localStorage.setItem('loggedInUser', newUsername);
+    } else {
+      // Заміна у списку
+      const idx = users.findIndex(u => u.username === user.username);
+      if (idx !== -1) users[idx] = user;
+    }
+
+    saveUsers(users);
+    alert('Profile saved!');
+    loadProfile();
+    // Очистити поле вибору файлу
+    document.getElementById('avatarInput').value = '';
+  }
+
+  // Вийти з аккаунту
+  function logout() {
+    localStorage.removeItem('loggedInUser');
+    window.location.href = 'login.html';
+  }
+
+  window.onload = loadProfile;
+</script>
+
+</body>
+</html>

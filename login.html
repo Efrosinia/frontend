@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login – RecomFilm</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="scripts/auth.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Login to RecomFilm</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="register.html">Register</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="auth-container">
+            <form id="loginForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <input type="submit" value="Login">
+            </form>
+
+            <p>Don't have an account? <a href="register.html">Register here</a>.</p>
+            <div id="loginMessage" class="auth-message"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 RecomFilm – Film & Series Recommendations</p>
+    </footer>
+</body>
+</html>
