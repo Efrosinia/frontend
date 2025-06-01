@@ -5,17 +5,31 @@ export default function Register() {
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Тут можна додати логіку для реєстрації, наприклад, API-запит
-    // Поки що просто показуємо повідомлення
-    if (newUsername && newPassword) {
-      setMessage(`User ${newUsername} successfully registered!`);
-      setNewUsername('');
-      setNewPassword('');
-    } else {
+    if (!newUsername || !newPassword) {
       setMessage('Please fill in both fields.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: newUsername, password: newPassword }),
+      });
+
+      if (response.ok) {
+        setMessage(`User ${newUsername} successfully registered!`);
+        setNewUsername('');
+        setNewPassword('');
+      } else {
+        const data = await response.json();
+        setMessage(data.message || 'Registration failed.');
+      }
+    } catch (error) {
+      setMessage('Network error. Please try again later.');
     }
   };
 
@@ -24,7 +38,7 @@ export default function Register() {
       <header>
         <h1>Register for RecomFilm</h1>
         <nav>
-          <a href="index.html">Home</a> | <a href="login.html">Login</a>
+          <a href="/">Home</a> | <a href="/login">Login</a>
         </nav>
       </header>
 
@@ -57,7 +71,7 @@ export default function Register() {
           </form>
 
           <p>
-            Already have an account? <a href="login.html">Login here</a>.
+            Already have an account? <a href="/login">Login here</a>.
           </p>
 
           <div id="registerMessage" className="auth-message" style={{ marginTop: '15px', color: 'green' }}>
